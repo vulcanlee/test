@@ -1,0 +1,19 @@
+﻿@page
+@model HelloRazorPage.Pages.HelloModel
+@{
+    ViewData["Title"] = "你好 Razor Page";
+}
+
+<h1>Hello</h1>
+
+<form method="post">
+    <p>
+        姓名: <input type="text" asp-for="YourName" />
+        <input type="submit" value="問安" />
+    </p>
+</form>
+
+@if(string.IsNullOrEmpty(Model.MyAnswer) == false)
+{
+    <div><span>伺服器回應 - </span>@Model.MyAnswer</div>
+}

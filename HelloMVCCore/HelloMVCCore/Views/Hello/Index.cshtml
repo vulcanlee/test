@@ -1,0 +1,14 @@
+﻿@model HelloMVCCore.Controllers.HelloModel
+@{
+    ViewData["Title"] = "你好 ASP.NET Core MVC";
+}
+
+<h1>Index</h1>
+
+<form asp-action="Post">
+    <p>
+        姓名: <input asp-for="YourName" class="form-control" />
+        <input type="submit" value="問安" />
+    </p>
+</form>
+
