@@ -1,0 +1,30 @@
+﻿@page "/Hello"
+
+<h3>你好 Blazor Server</h3>
+
+<p>
+    姓名: <input @bind="YourName" class="form-control" />
+    <input type="submit" value="問安" @onclick="SayHello" />
+</p>
+
+@if (string.IsNullOrEmpty(MyAnswer) == false)
+{
+    <div><span>伺服器回應 - </span>@MyAnswer</div>
+}
+
+@code {
+    public string YourName { get; set; }
+    public string MyAnswer { get; set; }
+
+    protected override void OnInitialized()
+    {
+        YourName = "請在此輸入姓名";
+
+    }
+
+    void SayHello()
+    {
+        MyAnswer = $"{YourName} 你好，這裡是 Blazor Server";
+
+    }
+}
