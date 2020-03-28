@@ -1,0 +1,21 @@
+﻿@page "/"
+@using bzPropertyChangedFody.ViewModels
+@using System.ComponentModel
+
+<h1>Hello, world!</h1>
+<input @bind-value="viewModel.Title"/>
+<div>@viewModel.Result</div>
+
+Welcome to your new app.
+
+@code  {
+    MyViewModel viewModel = new MyViewModel();
+    INotifyPropertyChanged notifyPropertyChanged;
+    protected override void OnInitialized()
+    {
+        viewModel.PropertyChanged += (s, e) =>
+        {
+
+        };
+    }
+}

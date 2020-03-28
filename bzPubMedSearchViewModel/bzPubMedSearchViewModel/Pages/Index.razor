@@ -1,0 +1,66 @@
+﻿@page "/"
+
+<h1>PubMed Advanced Search BuilderTutorial</h1>
+
+<div>
+    @ViewModel.QueryCondition
+</div>
+
+@foreach (var item in ViewModel.ConditionBuilderItems)
+{
+    <div class="row" style="padding-top:10px">
+
+        <div class="col-md-1">
+            @if (item.ShowLogical == true)
+            {
+                <select class="form-control"
+                        value="@item.AndOrLogical"
+                        @onchange="(x)=>ViewModel.AndOrLogicalSelectChanged(x, item)">
+                    <option value="And" selected>And</option>
+                    <option value="Or">Or</option>
+                </select>
+            }
+        </div>
+
+        <div class="col-md-2">
+            <select class="form-control" size="1"
+                    value="@item.FieldName"
+                    @onchange="(x)=>ViewModel.FieldNameSelectChanged(x, item)">
+                <option value=" ">All Fields</option>
+                @foreach (var country in ViewModel.FieldNameItems)
+                {
+                    <option value="@country.FieldName">@country.FieldName</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-7">
+            <input class="form-control"
+                   @onkeypress="async (x) => await ViewModel.RefreshInputAsync()"
+                   @bind-value="@item.FieldValue"
+                   @bind-value:event="oninput" />
+        </div>
+        <div class="col-md-2">
+            @if (item.ShowRemoveCondition == true)
+            {
+                <button class="btn-danger" @onclick="()=>ViewModel.OnRemoveCondition(item)"> - </button>
+            }
+            @if (item.ShowAddCondition == true)
+            {
+                <button class="btn-primary" @onclick="()=>ViewModel.OnAddCondition(item)"> + </button>
+            }
+        </div>
+    </div>
+}
+
+@code
+{
+    public PubMedSearchBuilderViewModel ViewModel { get; set; } = new PubMedSearchBuilderViewModel();
+
+    protected override void OnInitialized()
+    {
+        ViewModel = new PubMedSearchBuilderViewModel();
+        ViewModel.StateHasChangedHandler = () => { StateHasChanged(); };
+        ViewModel.Refresh();
+    }
+}
