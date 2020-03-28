@@ -1,0 +1,47 @@
+﻿@page "/"
+@inject IJSRuntime JSRuntime
+@using Microsoft.JSInterop
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<input type="file" @bind="filePath" @ref="fileUploadElement" id="fileUpload" />
+<button @onclick="UploadFile">Upload</button>
+
+@code{
+    ElementReference fileUploadElement;
+    string filePath;
+    async Task UploadFile()
+    {
+        var data = await JSRuntime.InvokeAsync<DataFormat>("fileUpload", fileUploadElement);
+        var fileExt = System.IO.Path.GetExtension(filePath);
+        string filename = $"{Guid.NewGuid()}.{fileExt}";
+        var base64encodedstring = data.content;
+        System.IO.File.WriteAllBytes(filename, Convert.FromBase64String(base64encodedstring));
+
+
+        var BaseUri = NavigationManager.BaseUri;
+
+        using (var content = new MultipartFormDataContent())
+        {
+            var bytes = Convert.FromBase64String(base64encodedstring);
+            var streamContent = new StreamContent(new System.IO.MemoryStream(bytes));
+            streamContent.Headers.Add("Content-Type", "application/octet-stream");
+            filename = $"{Guid.NewGuid()}.{fileExt}";
+            streamContent.Headers.Add("Content-Disposition", "form-data; name=\"files\"; filename=\"" + filename + "\"");
+            content.Add(streamContent, "file", filename);
+            var response = await Http.PostAsync($"{BaseUri}api/upload", content);
+            var fileTempName = await response.Content.ReadAsStringAsync();
+        }
+        //var response = await Http.PostAsync($"{BaseUri}api/upload", new ByteArrayContent(Convert.FromBase64String(foo)));
+        //var fileTempName = await response.Content.ReadAsStringAsync();
+        //response = await client.PostAsync(fooFullUrl, content);
+    }
+    class DataFormat
+    {
+        public string content { get; set; }
+    }
+}

@@ -1,0 +1,45 @@
+2020-03-17 17:04:09.1971 | ERROR | Common | Retrive Category Setting Items from remote has failed : 傳送要求時發生錯誤。  
+
+2020-03-17 17:04:10.2509 | ERROR | Common | Retrive All Setting Items from remote has failed : 傳送要求時發生錯誤。  
+
+2020-03-17 17:05:25.4744 | INFO | Common | [Get] http://erma.advantech.com.tw/ireceving/api/Authenticate QueryString cnV0aC5saW5AYWR2YW50dzo=  
+
+2020-03-17 17:05:25.7242 | ERROR | Common | [Put] /api/Authenticate Exception
+傳送要求時發生錯誤。 
+
+2020-03-17 17:05:47.0551 | INFO | Common | [Get] http://erma.advantech.com.tw/ireceving/api/Authenticate QueryString cnV0aC5saW5AYWR2YW50ZWNoLmNvbS50dzpydXRoODc1NQ==  
+
+2020-03-17 17:05:47.2857 | ERROR | Common | [Put] /api/Authenticate Exception
+傳送要求時發生錯誤。 
+
+2020-03-17 17:06:23.1034 | ERROR | Common | Retrive Category Setting Items from remote has failed : 傳送要求時發生錯誤。  
+
+2020-03-17 17:06:23.8279 | ERROR | Common | Retrive All Setting Items from remote has failed : 傳送要求時發生錯誤。  
+
+2020-03-17 17:34:13.4403 | INFO | Common | [Get] http://erma.advantech.com.tw/ireceving/api/Authenticate QueryString cnV0aC5saW5AYWR2YW50ZWNoLmNvbS50dzpydXRoODc1NQ==  
+
+2020-03-17 17:34:14.5160 | INFO | Common | [Get] /api/Authenticate Result
+      Http Response Status : OK
+      Error_Code : 
+      Token : 427b6641-69e2-4c0c-b664-76f64c6892d0
+      TokenExpiry : 3600
+      Response Result :
+                        "Authorized" 
+
+2020-03-17 17:34:52.4740 | INFO | Common | [Get] /api/iReceive Barcode  / RMANO u20300035-1 
+
+2020-03-17 17:34:53.1610 | INFO | Common | [Get] /api/iReceive Result
+      Http Response Status : OK
+      Error_Code : 
+      Token : 427b6641-69e2-4c0c-b664-76f64c6892d0
+      TokenExpiry : 
+      Response Result :
+                        [{"WholeSet_PN":"IDS-3210R-40SVA1E","Order_No":"U20300035","Item_No":1,"Order_DT":"2020-03-16T00:00:00","Order_by":"luke.suffolk@advantech.com","Bill_ID":"AUWDC002","Declare_Value":null,"Shipping":null,"Bill_Company":"DALCON COMPUTERS PTY LTD","Warranty_Type":"In","Product_Name":"N/A","Barcode":"PN19H82S0102PS0100","Description":"has a dead pixel (96LEDK-A104SV40NC3    10.4\" LED panel, 400nits, 800 x 600(G))","Analysis":" ","Reminder":null,"Cust_Reminder":null,"Product_Reminder":null,"Stage":2,"Warranty":"2022/01/29","Workflow":"Regular","Att1":"","Att2":"","Att3":null,"Internal_DOA":" ","SFIS_Flag":null,"Workflow_type":1,"RMA_Type":"Repair","Preview_analysis":" ","Credit_Term":null,"Front_Receive_Remark":"","Cust_SN":"IDA0365858","Cust_PN":"","Second_Repair":null,"Grade":"","ROHS":null,"ABC_Indicator":null,"Credit_Limit":null,"Credit_TOTAL_RECEIVABLES":null,"Credit_Balance":"0.00","Return_Qty":0,"Receive_Setting":{"Rework":false,"Product_Type":null,"Sl_Source":null,"Category_Type":null,"TAT":null,"Forwarder":null,"Tracking_Code":null,"Global_Service":"G-AAU"},"def_custom":null,"def_analysis":"","DOA_Period":false,"status_Str":null,"ItemType":null,"checkFlag":false,"warranty_flag":null,"Attach_Files":[],"SFIS_Customer_Name":null,"warranty_str":"In","Customer_Info":null,"ChargeTo":null,"backto":"","eRMA_Item_Workflow":null,"eRMA_Receive":null,"DOA_Mail":false,"Snd":null}]
+ 
+
+2020-03-17 17:34:54.5138 | INFO | Common | **DataSubmitPageViewModel > InitViewModel** has exception : [Message] -> 索引超出範圍。必須為非負數且小於集合的大小。
+參數名稱: index , [StackTrace] ->    於 System.ThrowHelper.ThrowArgumentOutOfRangeException(ExceptionArgument argument, ExceptionResource resource)
+   於 System.Collections.Generic.List`1.get_Item(Int32 index)
+   於 iReceivingTarget.Helpers.UIDataInitHelper.Warrantly_Init(BaseCollectionDataSource fooCollection) 於 D:\Vulcan\GitHub\iReceiving\Solutions\iReceivingTarget\iReceivingTarget\Helpers\UIDataInitHelper.cs: 行 26
+   於 iReceivingTarget.ViewModels.DataSubmitPageViewModel.InitViewModel() 於 D:\Vulcan\GitHub\iReceiving\Solutions\iReceivingTarget\iReceivingTarget\ViewModels\Apps\DataSubmitPageViewModel.cs: 行 213 
+
