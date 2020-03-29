@@ -1,0 +1,20 @@
+﻿@page "/"
+@inject IJSRuntime JSRuntime
+
+<h1>C# 呼叫 JavaScript 函數</h1>
+<button @onclick="AskYourName">你是誰</button>
+<div class="display-4 text-success">@name</div>
+<div id="welcome" class="display-4 text-danger"></div>
+@code {
+    string name = "";
+    async void AskYourName()
+    {
+        name = await JSRuntime.InvokeAsync<string>(
+                 "helloWorld.askYourName",
+                 "你是誰", "請輸入你的姓名");
+        StateHasChanged();
+        await JSRuntime.InvokeVoidAsync(
+                     "helloWorld.displayWelcome",
+                     $"歡迎你 {name}");
+    }
+}
