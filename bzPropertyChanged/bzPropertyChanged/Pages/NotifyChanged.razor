@@ -1,0 +1,148 @@
+﻿@page "/NotifyChanged"
+@using System.ComponentModel.DataAnnotations
+
+<h1>在 Blazor 實作出 PropertyChanged 機制</h1>
+
+<EditForm Model="@MyPerson" OnValidSubmit="HandleValidSubmit">
+    @*使用資料批註附加驗證支援*@
+    <DataAnnotationsValidator />
+    @*摘要說明驗證訊息。*@
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="FirstName">名</label>
+        <InputText id="FirstName" class="form-control" @bind-Value="MyPerson.FirstName" />
+        @*顯示特定欄位的驗證訊息，類似于驗證訊息標記協助程式。 使用 For 屬性指定驗證欄位，並以 lambda 運算式命名模型屬性*@
+        <ValidationMessage For="@(()=>MyPerson.FirstName)" />
+    </div>
+    <div class="form-group">
+        <label for="LastName">姓</label>
+        <InputText id="LastName" class="form-control" @bind-Value="MyPerson.LastName" />
+        <ValidationMessage For="@(()=>MyPerson.LastName)" />
+    </div>
+    <div class="form-group">
+        <label for="Age">年紀</label>
+        @*底下宣告，在瀏覽器端，會有錯誤訊息
+        Error: System.ArgumentException: Object of type 'Microsoft.AspNetCore.Components.ChangeEventArgs' cannot be converted to type 'System.Int32'*@
+        @*<InputNumber id="Age" class="form-control"
+        @bind-Value="MyPerson.Age" @bind-Value:event="oninput" />*@
+
+        @*底下用法可以正常運作，不過，需要自行綁定一個額外事件來進行即時輸入的內容更新*@
+        @*<InputNumber id="Age" class="form-control"
+                     @bind-Value="MyPerson.Age" @oninput="@((e)=>{ OnAgeOninput(e);})" />*@
+
+        @*底下使用客製化的 InputNumber 元件，使用 oninput 事件，來更新屬性值*@
+        <MyInputNumber id="Age" class="form-control"
+                     @bind-Value="MyPerson.Age" />
+        <ValidationMessage For="@(()=>MyPerson.Age)" />
+    </div>
+
+    <button type="submit" class="btn btn-primary" disabled="@IsDisabled">Submit</button>
+
+</EditForm>
+
+<div class="text-success">
+    @Message
+</div>
+
+<div class="text-danger">
+    @AgeRange
+</div>
+
+@code{
+
+    void OnAgeOninput(ChangeEventArgs e)
+    {
+        MyPerson.Age = Convert.ToInt32(e.Value);
+    }
+ 
+    public class Person : System.ComponentModel.INotifyPropertyChanged
+    {
+        private string firstName;
+
+        [Required(ErrorMessage = "欄位 名，不可為空白")]
+        public string FirstName
+        {
+            get { return firstName; }
+            set
+            {
+                firstName = value;
+                OnPropertyChanged();
+            }
+        }
+
+        [Required(ErrorMessage = "欄位 姓，不可為空白")]
+        private string lastName;
+
+        public string LastName
+        {
+            get { return lastName; }
+            set
+            {
+                lastName = value;
+                OnPropertyChanged();
+            }
+        }
+
+        [Range(0, 99, ErrorMessage = "年紀數值不正確")]
+        private int age;
+
+        public int Age
+        {
+            get { return age; }
+            set
+            {
+                age = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+
+        void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName]string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+        }
+    }
+
+    Person MyPerson = new Person();
+    bool IsDisabled = true;
+    string Message = "";
+    string AgeRange = "";
+
+    protected override void OnInitialized()
+    {
+        MyPerson.PropertyChanged += (s, e) =>
+        {
+            Message = $"這個屬性 {e.PropertyName} 已經有變更了";
+            if (e.PropertyName == nameof(MyPerson.Age))
+            {
+                if (MyPerson.Age < 13)
+                {
+                    AgeRange = "你是小朋友";
+                    IsDisabled = true;
+                }
+                else if (MyPerson.Age < 20)
+                {
+                    AgeRange = "你是年青人";
+                    IsDisabled = false;
+                }
+                else if (MyPerson.Age < 28)
+                {
+                    AgeRange = "你是青年人";
+                    IsDisabled = false;
+                }
+                else
+                {
+                    AgeRange = "你是成年人";
+                    IsDisabled = false;
+                }
+            }
+        };
+    }
+
+    private void HandleValidSubmit()
+    {
+        Console.WriteLine("OnValidSubmit");
+    }
+}

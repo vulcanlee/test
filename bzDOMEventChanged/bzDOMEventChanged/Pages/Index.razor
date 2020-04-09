@@ -1,0 +1,43 @@
+﻿@page "/"
+@using System.ComponentModel.DataAnnotations
+
+<h1>在 Blazor 使用 DOM 事件，設計屬性變更的需求</h1>
+
+<div class="form-group">
+    <label for="FirstName">名</label>
+    <input id="FirstName" class="form-control" @bind="MyPerson.FirstName" />
+</div>
+<div class="form-group">
+    <label for="LastName">姓</label>
+    <input id="LastName" class="form-control" @bind="MyPerson.LastName" />
+</div>
+<div class="form-group">
+    <label for="Age">年紀</label>
+    <input type="number" id="Age" class="form-control"
+           @bind="MyPerson.Age" @bind:event="oninput" />
+</div>
+
+<button type="submit" class="btn btn-primary" disabled="@IsDisabled">Submit</button>
+
+<div class="text-danger">
+    @MyPerson.Age
+</div>
+<div class="text-danger">
+    這裡可以顯示年紀分類說明文字
+</div>
+
+@code{
+
+    class Person
+    {
+        [Required(ErrorMessage = "欄位 名，不可為空白")]
+        public string FirstName { get; set; }
+        [Required(ErrorMessage = "欄位 姓，不可為空白")]
+        public string LastName { get; set; }
+        [Range(0, 99, ErrorMessage = "年紀數值不正確")]
+        public int Age { get; set; }
+    }
+
+    Person MyPerson = new Person();
+    bool IsDisabled = true;
+}
